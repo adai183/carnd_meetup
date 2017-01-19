@@ -121,9 +121,9 @@ module.exports = React.createClass({
            }
        }).done(function (data) {
           if (!self.state.noGoogleMatch) {
-            if (town != 'Rogers City' || self.state.name.indexOf('Troll') == -1) {
+            if (self.state.name.indexOf('Derp') == -1 || self.state.name.indexOf('Troll') == -1) {
               saveToDb(
-              self.state.name,
+              self.state.name,   
               self.state.country,
               town,
               self.state.postalCode,

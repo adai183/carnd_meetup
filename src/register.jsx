@@ -121,7 +121,8 @@ module.exports = React.createClass({
            }
        }).done(function (data) {
           if (!self.state.noGoogleMatch) {
-            saveToDb(
+            if (town != 'Rogers City' || self.state.name.indexOf('Troll') == -1) {
+              saveToDb(
               self.state.name,
               self.state.country,
               town,
@@ -130,6 +131,7 @@ module.exports = React.createClass({
               coords.lat,
               coords.lng
              );
+            }
              self.setState({error:false});
              self.setState({noGoogleMatch:false});
              self.setState({submitted: true});

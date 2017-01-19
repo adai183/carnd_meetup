@@ -25,17 +25,17 @@
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        var myFirebase = new Firebase("https://glowing-torch-2950.firebaseio.com/items/");
+        var myFirebase = new Firebase("https://carnd-meetup.firebaseio.com/users");
         myFirebase.orderByKey().on("child_added", function(snapshot) {
             var person = snapshot.val();
 
             if (person.distance < maxDistance){
-              var marker = L.circle([person.lat,person.lng], person.distance * 1000).addTo(map);
+              var marker = L.circle([person.lat,person.lng], person.distance * 1000 * 0.621371).addTo(map);
             }else if(person.distance >= maxDistance) {
               var marker = L.circle([person.lat,person.lng], maxDistance * 1000).addTo(map);
             }
             var town = person.town + ' , ' ;
-            marker.bindPopup('<p> ' + person.name + '<br/>' + town + person.country + '</p>');
+            marker.bindPopup('<p> ' + person.username + '<br/>' + town + person.country + '</p>');
 
         });
 

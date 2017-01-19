@@ -23,4 +23,4 @@ Checkout this repo, install dependencies, then start the gulp process with the f
 	> gulp
 ```
 
-To visit a live version of the page, please visit the [Udacious Meet Up Tribe on GitHub Pages](http://adai183.github.io/meetup_form/).
+To visit a live version of the page, please visit the [Udacious Meet Up Tribe on GitHub Pages](https://adai183.github.io/carnd_meetup/).

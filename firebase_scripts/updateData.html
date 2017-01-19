@@ -1,0 +1,63 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+var memberarr = [];
+
+var myFirebase = new Firebase("https://glowing-torch-2950.firebaseio.com/items/");
+myFirebase.orderByKey().on("child_added", function(snapshot) {
+    var person = snapshot.val();
+console.log(person);
+    var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=country' + person.country + '|postal_code:' + person.postalCode + '&language=en';
+    $.get(url, function(data) {
+        if (data.status === 'OK') {
+            var result = data.results[0];
+            var coords = result.geometry.location;
+            var town;
+            var country;
+
+            for (var comp in result.address_components) {
+                if (result.address_components[comp].types.indexOf('country') != -1) {
+                    country = result.address_components[comp].long_name;
+                } else if (result.address_components[comp].types.indexOf('locality') != -1) {
+                    if ('long_name' in result.address_components[comp]) {
+
+                        town = result.address_components[comp].long_name;
+                    }
+                }
+
+            }
+            if (typeof town == 'undefined') {
+                town = '';
+            }
+
+
+            var o = {
+            'name': person.name,
+            'country': country,
+            'distance': person.distance,
+            'town' : person.town,
+            'postalCode': person.postalCode,
+            'lat': person.lat,
+            'lng': person.lng
+          };
+
+          var messageListRef = new Firebase('https://lostintrans.firebaseio.com/items/');
+          var newMessageRef = messageListRef.push();
+          newMessageRef.set(o);
+
+        }
+    });
+
+});
+
+
+
+
+
+</script>
+</body>

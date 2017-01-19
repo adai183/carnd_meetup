@@ -1,0 +1,120 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+var simon = {
+  name:"Simon",
+  country: "US",
+  postalCode: "07068",
+  distance: "50"
+}
+simon.name="Simon";
+var oldData;
+var newData;
+
+var oldDataarr= [];
+var newDataarr= [];
+var compaar = [];
+
+$.getJSON('data/glowing-torch-2950-export.json')
+.done(function (data) {
+  oldData = data.items;
+  for (var key in oldData) {
+    oldDataarr.push(oldData[key]);
+  }
+
+  $.getJSON('data/lostintrans-export.json')
+  .done(function (data) {
+    newData = data.items;
+    for (var mem in newData) {
+      newDataarr.push(newData[mem]);
+    }
+
+    for (var i = 0; i < oldDataarr.length; i++) {
+      for (var j = 0; j < newDataarr.length; j++) {
+        if (oldDataarr[i].name === newDataarr[j].name && oldDataarr[i].postalCode === newDataarr[j].postalCode) {
+          compaar.push(newDataarr[j]);
+        }
+      }
+    }
+
+  for (var l = 0; l < compaar.length; l++){
+     var k=0;
+     while(k < oldDataarr.length)
+     {
+      if (oldDataarr[k].name === compaar[l].name && oldDataarr[k].postalCode === compaar[l].postalCode)
+        oldDataarr.splice(k,1);
+      else k++;
+     }
+   }
+/*
+   for (var m = 0; m < oldDataarr.length; m++){
+     compaar.push(oldDataarr[m]);
+   }
+   console.log(compaar);
+
+   for (var n = 0; n < compaar.length; n++) {
+     compaar[i]
+   }
+   */
+
+
+  console.log(oldDataarr);
+
+
+  });
+});
+
+
+
+var send = function (person) {
+
+  var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=country' + person.country;
+  $.get(url, function(data) {
+    console.log(url);
+      if (data.status === 'OK') {
+          var result = data.results[0];
+          var coords = result.geometry.location;
+          var town;
+          var country;
+
+          for (var comp in result.address_components) {
+              if (result.address_components[comp].types.indexOf('country') != -1) {
+                  country = result.address_components[comp].long_name;
+              } else if (result.address_components[comp].types.indexOf('locality') != -1) {
+                  if ('long_name' in result.address_components[comp]) {
+
+                      town = result.address_components[comp].long_name;
+                  }
+              }
+
+          }
+          if (typeof town == 'undefined') {
+              town = '';
+          }
+
+
+          var o = {
+          'name': person.name,
+          'country': country,
+          'town' : town,
+          'postalCode': person.postalCode,
+          'lat': coords.lat,
+          'lng': coords.lng,
+          'distance': person.distance
+        };
+
+        var messageListRef = new Firebase('https://lostintrans.firebaseio.com//items/');
+        var newMessageRef = messageListRef.push();
+        newMessageRef.set(o);
+
+      }
+  });
+}
+
+</script>
+</body>

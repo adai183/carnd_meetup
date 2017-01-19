@@ -1,0 +1,28 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+var Oldmemberarr = [];
+var Newmemberarr = [];
+
+var myFirebase = new Firebase("https://glowing-torch-2950.firebaseio.com/items/");
+myFirebase.orderByKey().on("child_added", function(snapshot) {
+    var person = snapshot.val();
+    
+    Oldmemberarr.push(person);
+});
+
+
+var myFirebase2 = new Firebase("https://lostintrans.firebaseio.com/items");
+myFirebase2.orderByKey().on("child_added", function(snapshot) {
+    var person2 = snapshot.val();
+    Newmemberarr.push(person2);
+
+});
+
+</script>
+</body>
